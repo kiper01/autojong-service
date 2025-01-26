@@ -1,0 +1,153 @@
+definitions:
+  dto.ListResponse:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      requests:
+        items:
+          $ref: '#/definitions/dto.Request'
+        type: array
+      total_pages:
+        type: integer
+    type: object
+  dto.PostRequest:
+    properties:
+      car_info:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+    type: object
+  dto.Request:
+    properties:
+      car_info:
+        type: string
+      date:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: AutoJong Service API
+  version: "1.0"
+paths:
+  /api/v1/request/get/:
+    get:
+      consumes:
+      - application/json
+      description: Получить заявку по id
+      parameters:
+      - description: ID Request
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Request'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Получить заявку
+      tags:
+      - Requests
+  /api/v1/request/list:
+    get:
+      consumes:
+      - application/json
+      description: Получить список заявок с пагинацией
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Получить список всех заявок
+      tags:
+      - Requests
+  /api/v1/request/post:
+    post:
+      consumes:
+      - application/json
+      description: Добавить заявку
+      parameters:
+      - description: Заявка
+        in: body
+        name: page
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successful response
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Добавить заявку
+      tags:
+      - Requests
+securityDefinitions:
+  ApiKeyAuth:
+    description: Description for what is this security definition being used
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
